@@ -95,8 +95,31 @@ Common settings:
   - `https://login.usgovcloudapi.net`
   - `https://login-us.microsoftonline.com`
   
+
+
+## Default SSO Extension Request Configurations:
+ 
+The following SSO Extension Configurations are enabled by default starting August 31st,2022 -
+
+iOS:
+<key>AppPrefixAllowList</key>
+ <string>com.apple.</string>
+<key>browser_sso_interaction_enabled</key>
+ <integer>1</integer>
+<key>disable_explicit_app_prompt</key>
+ <integer>1</integer> </dict>
+macOS:
+<key>AppPrefixAllowList</key>
+ <string>com.microsoft.,com.apple.</string>
+<key>browser_sso_interaction_enabled</key>
+ <integer>1</integer>
+<key>disable_explicit_app_prompt</key>
+ <integer>1</integer> </dict>
+If customer has any other value present in any of these configurations, they would overwrite the default values.
+
 ### More configuration options
 You can add more configuration options to extend SSO functionality to other apps.
+
 
 #### Enable SSO for apps that don't use a Microsoft identity platform library
 
@@ -131,6 +154,10 @@ When this flag is on (its value is set to `1`), all MDM-managed apps not in the 
 >[!NOTE]
 > Safari and Safari View Service are allowed to participate in SSO by default. Can be configured *not* to participate in SSO by adding the bundle IDs of Safari and Safari View Service in AppBlockList. 
 > iOS Bundle IDs : [com.apple.mobilesafari, com.apple.SafariViewService] , macOS BundleID : com.apple.Safari
+
+### Exclude MSAL requests from Browser SSO requests
+
+Apps that integrate with MSAL Obj-C or OneAuth/MSAL CPP are enabled for the SSO extension by default. They don't need to be added to the AppPrefixAllowList or AppAllowList by the administrator. Hence silent requests originating from either MSAL Obj-C, OneAuth/MSAL CPP or ADAL Obj-C libraries that trigger Browser SSO will be detected and excluded. In this context, silent means a Browser SSO request without UI context. All openid metadata, authority discovery and token requests will fall into this category.
 
 #### Enable SSO for all apps with a specific bundle ID prefix
 - **Key**: `AppPrefixAllowList`
